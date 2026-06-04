@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beranda Layanan - Bank Merdeka</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body onload="initDashboard()">
+    <div class="container">
+        
+        <div class="card" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+            <div>
+                <h3 id="user-greeting" style="margin: 0;">Memuat Data...</h3>
+                <span id="user-instansi-badge" class="badge-instansi" style="display: none;"></span>
+            </div>
+            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                <a href="admin.html" id="btn-admin-shortcut" class="btn btn-warning" style="display: none;">Panel Admin</a>
+                <button class="btn btn-secondary" onclick="openModal('modal-ubah-pin')">Ubah PIN</button>
+                <button class="btn btn-danger" onclick="logout()">Keluar</button>
+            </div>
+        </div>
+
+        <div class="balance-card">
+            <p>Saldo Utama Tersedia</p>
+            <div class="balance-amount" id="user-balance">Rp 0</div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; margin-top: 15px;">
+                <span class="badge-info">No. Rekening: <span id="user-account-number">-</span></span>
+                <span id="email-container" class="badge-info" style="display: none;">Email Akun: <span id="user-account-email">-</span></span>
+                <span id="address-container" class="badge-info" style="display: none; background: rgba(255,255,255,0.15);">Alamat/Lokasi: <span id="user-account-address">-</span></span>
+            </div>
+        </div>
+
+        <div class="action-grid">
+            <button class="btn btn-primary" onclick="openModal('modal-topup')">Top Up</button>
+            <button class="btn btn-primary" onclick="openModal('modal-transfer')">Transfer</button>
+            <button class="btn btn-primary" onclick="openModal('modal-tarik')">Tarik Tunai</button>
+            <button class="btn btn-primary" onclick="openModal('modal-tagihan')">Tagihan <span id="badge-tagihan"></span></button>
+            <button class="btn btn-primary" onclick="openModal('modal-minta')">Buat Penagihan</button>
+            <button class="btn btn-success" onclick="openModal('modal-pengajuan-instansi')" id="btn-instansi">Pengajuan Instansi</button>
+        </div>
+
+        <div class="card">
+            <h3 style="margin-bottom: 15px;">Mutasi Rekening Koran</h3>
+            <div class="table-container">
+                <table>
+                    <thead><tr><th>Tanggal/Waktu</th><th>Tipe Aktivitas</th><th>Keterangan Sistem</th><th>Nominal Transaksi</th></tr></thead>
+                    <tbody id="history-table"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-ubah-pin" class="modal"><div class="modal-content"><span class="close-btn" onclick="closeModal('modal-ubah-pin')">&times;</span><h3>Ubah PIN Rekening</h3><div class="form-group"><input type="password" id="pin-lama" class="form-control" placeholder="Masukkan PIN Lama"></div><div class="form-group"><input type="password" id="pin-baru" class="form-control" placeholder="Buat PIN Baru (6 Digit)"></div><button class="btn btn-primary" style="width:100%;" onclick="ubahPinMandiri()">Otorisasi Perubahan PIN</button></div></div>
+    <div id="modal-topup" class="modal"><div class="modal-content"><span class="close-btn" onclick="closeModal('modal-topup')">&times;</span><h3>TOP UP</h3><div class="form-group"><input type="number" id="topup-amount" class="form-control" placeholder="Nominal Setor (Rp)"></div><div class="form-group"><input type="password" id="topup-pin" class="form-control" placeholder="Konfirmasi PIN Rekening"></div><button class="btn btn-success" style="width:100%;" onclick="processTopUp()">Top Up Sekarang</button></div></div>
+    <div id="modal-tarik" class="modal"><div class="modal-content"><span class="close-btn" onclick="closeModal('modal-tarik')">&times;</span><h3>Penarikan Saldo</h3><p style="font-size:12px; color:var(--text-muted); margin-bottom:15px;">*Akun non-pribadi butuh PIN Admin Utama.</p><div class="form-group"><input type="number" id="tarik-amount" class="form-control" placeholder="Nominal Penarikan"></div><div class="form-group"><input type="password" id="tarik-pin" class="form-control" placeholder="PIN Konfirmasi Otorisasi"></div><button class="btn btn-primary" style="width:100%;" onclick="processTarik()">Tarik</button></div></div>
+    <div id="modal-transfer" class="modal"><div class="modal-content"><span class="close-btn" onclick="closeModal('modal-transfer')">&times;</span><h3>Kirim Dana</h3><div class="form-group"><input type="text" id="tf-target" class="form-control" placeholder="Nomor Rekening Tujuan" oninput="lookupName('tf-target', 'tf-name-preview')"><span id="tf-name-preview" class="target-name-preview"></span></div><div class="form-group"><input type="number" id="tf-amount" class="form-control" placeholder="Nominal Transfer"></div><div class="form-group"><input type="password" id="tf-pin" class="form-control" placeholder="PIN Rekening Anda"></div><button class="btn btn-primary" style="width:100%;" onclick="processTransfer()">Konfirmasi</button></div></div>
+    <div id="modal-minta" class="modal"><div class="modal-content"><span class="close-btn" onclick="closeModal('modal-minta')">&times;</span><h3>Tagihan</h3><div class="form-group"><input type="text" id="req-target" class="form-control" placeholder="Nomor Rekening Tertagih" oninput="lookupName('req-target', 'req-name-preview')"><span id="req-name-preview" class="target-name-preview"></span></div><div class="form-group"><input type="number" id="req-amount" class="form-control" placeholder="Jumlah Nominal Tagihan"></div><div class="form-group"><input type="text" id="req-reason" class="form-control" placeholder="Keterangan Nota/Tagihan"></div><button class="btn btn-primary" style="width:100%;" onclick="processRequest()">Kirim</button></div></div>
+    <div id="modal-tagihan" class="modal"><div class="modal-content" style="max-width: 650px;"><span class="close-btn" onclick="closeModal('modal-tagihan')">&times;</span><h3>Buku Invoice Masuk</h3><div class="table-container"><table><thead><tr><th>Pihak Penagih</th><th>Keterangan</th><th>Jumlah</th><th>Aksi</th></tr></thead><tbody id="tagihan-table"></tbody></table></div></div></div>
+    
+    <div id="modal-pengajuan-instansi" class="modal">
+        <div class="modal-content" style="max-width: 700px;"><span class="close-btn" onclick="closeModal('modal-pengajuan-instansi')">&times;</span>
+            <h3>Pengajuan Proposal Dana Alokasi</h3>
+            <p style="font-size: 13px; color:var(--text-muted); margin-bottom: 20px;">Layanan pengajuan anggaran dana Bantuan/Pendidikan ke Rekening Otoritas Pemerintah.</p>
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 14px; margin-bottom: 20px;">
+                <h4 style="margin-bottom: 12px;">Kirim Berkas Proposal</h4>
+                <div class="form-group"><input type="text" id="gov-target" class="form-control" placeholder="No. Rekening Instansi Pengalokasi" oninput="lookupName('gov-target', 'gov-name-preview')"><span id="gov-name-preview" class="target-name-preview"></span></div>
+                <div class="form-group"><input type="number" id="gov-amount" class="form-control" placeholder="Nominal Dana Anggaran Diusulkan"></div>
+                <div class="form-group"><select id="gov-kategori" class="form-control" onchange="checkGovCategory()"></select></div>
+                
+                <div id="health-fields" style="display: none; background: #fef2f2; padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #fee2e2;">
+                    <label style="font-size:12px; color:var(--primary); margin-bottom:6px;"><b>Verifikasi Validitas Rekam Medis:</b></label>
+                    <input type="text" id="gov-faskes" class="form-control" placeholder="Nama Rumah Sakit / Puskesmas Rujukan" style="margin-bottom:10px;">
+                    <label style="font-size:12px; color:var(--text-muted);">Tanggal Kunjungan Pemeriksaan:</label>
+                    <input type="date" id="gov-tanggal" class="form-control" style="margin-bottom:10px;">
+                    <input type="text" id="gov-antrian" class="form-control" placeholder="Nomor Tiket Antrian Medis">
+                </div>
+                <div class="form-group"><input type="text" id="gov-reason" class="form-control" placeholder="Spesifikasi Target Pemanfaatan Dana"></div>
+                <button class="btn btn-primary" style="width:100%;" onclick="submitGovRequest()">Kirim Permohonan Proposal</button>
+            </div>
+            <h4>Log Status Pengajuan</h4>
+            <div class="table-container"><table><thead><tr><th>Instansi Tujuan</th><th>Rincian Deskripsi</th><th>Kondisi Status</th><th>Aksi</th></tr></thead><tbody id="gov-user-table"></tbody></table></div>
+        </div>
+    </div>
+
+    <div id="custom-alert" class="modal"><div class="modal-content modal-alert"><h3 id="alert-title">Sistem Informasi</h3><p id="alert-msg"></p><div id="alert-buttons"></div></div></div>
+    <script src="script.js"></script>
+</body>
+</html>

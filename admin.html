@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pusat Kontrol - Admin Bank</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body onload="initAdmin()">
+    <div class="container" style="max-width: 1200px;">
+        
+        <div class="card" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+            <div>
+                <h2 style="color: var(--primary); margin:0;">PANEL ADMIN</h2>
+                <p style="color: var(--text-muted); font-size: 14px; margin-top:4px;">Pusat Data Pengguna Bank Merdeka</p>
+            </div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button class="btn btn-danger" onclick="deleteAllUsers()">HAPUS SELURUH DATA</button>
+                <a href="beranda.html" class="btn btn-primary">Kembali ke Beranda</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="tab-wrapper">
+                <button class="tab-btn active" onclick="switchTab('tab-pribadi', this)">Akun Pribadi</button>
+                <button class="tab-btn" onclick="switchTab('tab-swasta', this)">Swasta</button>
+                <button class="tab-btn" onclick="switchTab('tab-bumn', this)">BUMN</button>
+                <button class="tab-btn" onclick="switchTab('tab-pemerintah', this)">Instansi Pemerintah</button>
+                <button class="tab-btn" onclick="switchTab('tab-pendidikan', this)">Satuan Pendidikan</button>
+                <button class="tab-btn" onclick="switchTab('tab-transaksi', this)">Riwayat Transaksi</button>
+                <button class="tab-btn" onclick="switchTab('tab-pengajuan', this)">Pengajuan Dana</button>
+            </div>
+
+            <div id="tab-pribadi" class="tab-content active">
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>No. Rekening</th><th>Nama Lengkap</th><th>Alamat (Lokasi)</th><th>Email</th><th>Saldo</th><th>Aksi Kontrol</th></tr></thead>
+                        <tbody id="admin-pribadi-table"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="tab-swasta" class="tab-content">
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>No. Rekening</th><th>Badan Usaha</th><th>Alamat (Lokasi Kantor Induk)</th><th>Email</th><th>Sandi PIN</th><th>Saldo</th><th>Aksi Kontrol</th></tr></thead>
+                        <tbody id="admin-swasta-table"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="tab-bumn" class="tab-content">
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>No. Rekening</th><th>Nama Usaha</th><th>Alamat (Lokasi Kantor Induk)</th><th>Email</th><th>Sandi PIN</th><th>Saldo</th><th>Aksi Kontrol</th></tr></thead>
+                        <tbody id="admin-bumn-table"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="tab-pemerintah" class="tab-content">
+                <div class="sub-tab-container">
+                    <button class="btn-filter active" onclick="filterGov('ALL', this)">Semua Tingkat</button>
+                    <button class="btn-filter" onclick="filterGov(1, this)">Pusat</button>
+                    <button class="btn-filter" onclick="filterGov(2, this)">Provinsi</button>
+                    <button class="btn-filter" onclick="filterGov(3, this)">Kota / Kabupaten</button>
+                    <button class="btn-filter" onclick="filterGov(4, this)">Kecamatan</button>
+                    <button class="btn-filter" onclick="filterGov(5, this)">Desa / Kelurahan</button>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>No. Rekening</th><th>Nama Instansi</th><th>Alamat (Lokasi)</th><th>Tingkatan</th><th>Email</th><th>Sandi PIN</th><th>Saldo</th><th>Aksi Kontrol</th></tr></thead>
+                        <tbody id="admin-gov-accounts-table"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="tab-pendidikan" class="tab-content">
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>No. Rekening</th><th>Institusi Pendidikan</th><th>Alamat Wilayah</th><th>Email</th><th>Sandi PIN</th><th>Saldo</th><th>Aksi Kontrol</th></tr></thead>
+                        <tbody id="admin-pendidikan-table"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="tab-transaksi" class="tab-content">
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>Waktu Transaksi</th><th>No. Rek Asal</th><th>Nama</th><th>Tipe Aktivitas</th><th>Keterangan</th><th>Nominal</th></tr></thead>
+                        <tbody id="admin-global-table"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="tab-pengajuan" class="tab-content">
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>Pengaju</th><th>Nominal</th><th>Spesifikasi / Medis</th><th>Status Persetujuan</th><th>Aksi Admin</th></tr></thead>
+                        <tbody id="admin-gov-table"></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="custom-alert" class="modal"><div class="modal-content modal-alert"><h3 id="alert-title">Pusat Informasi</h3><p id="alert-msg"></p><div id="alert-buttons"></div></div></div>
+    <script src="script.js"></script>
+</body>
+</html>

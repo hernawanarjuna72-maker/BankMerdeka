@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Merdeka - Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container" style="max-width: 440px; margin-top: 60px;">
+        <div class="card text-center">
+            <h2 style="color: var(--primary); margin-bottom: 5px;">BANK MERDEKA</h2>
+            <p style="color: var(--text-muted); font-size: 13px; font-weight: 500; letter-spacing: 1px; margin-bottom: 25px;">BANK NEGARA INDONESIA</p>
+            
+            <div id="login-section">
+                <h3 style="margin-bottom: 15px;">LOGIN</h3>
+                <div class="form-group">
+                    <input type="email" id="login-email" class="form-control" placeholder="Alamat Email">
+                </div>
+                <div class="form-group">
+                    <input type="password" id="login-pin" class="form-control" placeholder="PIN Rekening (6 Digit)">
+                </div>
+                <button class="btn btn-primary" style="width:100%;" onclick="login()">MASUK</button>
+                <p style="margin-top: 20px; font-size: 14px; color: var(--text-muted);">Belum memiliki rekening? <a href="#" onclick="toggleView()" style="color: var(--primary); font-weight: 600; text-decoration: none;">Buka Rekening</a></p>
+            </div>
+
+            <div id="register-section" style="display: none;">
+                <h3 style="margin-bottom: 15px;">BUKA REKENING</h3>
+                
+                <div class="form-group">
+                    <label>Jenis Rekening</label>
+                    <select id="reg-type" class="form-control" onchange="checkRegType()">
+                        <option value="pribadi">Akun Pribadi</option>
+                        <option value="swasta">Perusahaan Swasta(PT, CV, UD, dll)</option>
+                        <option value="instansi">Instansi Negara / Sekolah / BUMN</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <input type="text" id="reg-name" class="form-control" placeholder="Nama Lengkap">
+                </div>
+                
+                <div class="form-group">
+                    <label>Alamat Lengkap (Lokasi)</label>
+                    <input type="text" id="reg-address" class="form-control" placeholder="Domisili">
+                </div>
+                
+                <div class="form-group">
+                    <label>Tanggal Lahir</label>
+                    <input type="date" id="reg-dob" class="form-control">
+                </div>
+                
+                <div class="form-group">
+                    <input type="email" id="reg-email" class="form-control" placeholder="Email">
+                </div>
+                
+                <div class="form-group">
+                    <input type="password" id="reg-pin" class="form-control" placeholder="Buat PIN Rekening (6 Digit)">
+                </div>
+                
+                <div class="form-group" id="doc-upload-group" style="display: none;">
+                    <label>Dokumen Legalitas / Berkas Pendirian (PDF/JPG)</label>
+                    <input type="file" id="reg-doc" class="form-control">
+                </div>
+                
+                <button class="btn btn-success" style="width:100%;" onclick="register()">DAFTAR</button>
+                <p style="margin-top: 20px; font-size: 14px; color: var(--text-muted);">Sudah terdaftar? <a href="#" onclick="toggleView()" style="color: var(--primary); font-weight: 600; text-decoration: none;">Login</a></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="custom-alert" class="modal">
+        <div class="modal-content modal-alert">
+            <h4 id="alert-title" style="margin-bottom: 10px; color: var(--primary);">Sistem Informasi</h4>
+            <p id="alert-msg" style="margin-bottom: 20px; font-size: 14px; color: var(--secondary);"></p>
+            <div id="alert-buttons" style="display: flex; gap: 10px; justify-content: center;"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
